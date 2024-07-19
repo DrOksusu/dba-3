@@ -1,27 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AJAX Example</title>
-    <script>
-        function fetchData() {
-            var xhr = new XMLHttpRequest();
-            xhr.open("GET", "https://your-api-gateway-endpoint", true);  // API Gateway 엔드포인트를 입력하세요.
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    console.log(response);
-                    // 데이터를 처리하는 로직을 여기에 작성합니다.
-                    document.getElementById("result").innerText = "Data received: " + JSON.stringify(response);
-                }
-            };
-            xhr.send();
+    <title>일계표 생성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
         }
-    </script>
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            margin: 10px 0;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        #message {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e2e3e5;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <button onclick="fetchData()">Fetch Data</button>
-    <div id="result"></div>
+    <div class="container">
+        <h1>일계표 생성</h1>
+        <button id="dailySalesButton" class="btn">일계표 생성</button>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $("#dailySalesButton").click(function(){
+                $("#message").text("작업 중입니다. 조금만 기다려주세요~").show();
+
+                $.ajax({
+                    url: "http://18.179.42.23:5000/Download-excel",
+                    type: "GET",
+                    success: function(response){
+                        $("#message").text("일계표 생성이 완료 됐습니다! 완료시 아래버튼을 클릭해주세요~");
+                        setTimeout(function() {
+                            $("#message").fadeOut();
+                        }, 80000);
+                    },
+                    error: function(xhr, status, error){
+                        $("#message").text("작업 중 오류가 발생했습니다.");
+                        setTimeout(function() {
+                            $("#message").fadeOut();
+                        }, 80000);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>
