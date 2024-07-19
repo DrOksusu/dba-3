@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX Example</title>
+    <script>
+        function fetchData() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://your-api-gateway-endpoint", true);  // API Gateway 엔드포인트를 입력하세요.
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    console.log(response);
+                    // 데이터를 처리하는 로직을 여기에 작성합니다.
+                    document.getElementById("result").innerText = "Data received: " + JSON.stringify(response);
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <button onclick="fetchData()">Fetch Data</button>
+    <div id="result"></div>
+</body>
+</html>
